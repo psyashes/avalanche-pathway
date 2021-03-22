@@ -7,7 +7,11 @@ const client = require("./client")
 const credentialsPath = "./credentials"
 
 async function main() {
-  // 1. Configure keychain
+  // Initialize the X-Chain client and keychain
+  const chain = client.XChain()
+  const keyChain = chain.keyChain()
+  const keyPath = `${credentialsPath}/keypair.json`
+
   // 2. Generate private key
   // 3. Check address balance
 }
