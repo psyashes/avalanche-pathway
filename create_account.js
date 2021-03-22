@@ -30,7 +30,18 @@ async function main() {
   const key = keyChain.importKey(data.privkey)
   console.log("Imported X-chain address:", key.getAddressString())
 
-  // 3. Check address balance
+
+  console.log("Fetching address balances...")
+  const balances = await chain.getAllBalances(key.getAddressString())
+
+  if (balances.length > 0) {
+    console.log(balances)
+  } else {
+    console.log("Address does not have any associated balances yet.")
+    console.log("==============================================================")
+    console.log("Visit https://faucet.avax-test.network/ to pre-fund your address.")
+    console.log("==============================================================")
+  }
 }
 
 main().catch((err) => {
