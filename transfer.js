@@ -45,7 +45,30 @@ async function main() {
     binTools.stringToBuffer("Figment Pathway") // memo, totally optional
   )
 
-  // 3. Send transaction to network
+  // Generate a signed transaction
+  const signedTx = unsignedTx.sign(keychain)
+
+  // Send transaction to network
+  const txID = await chain.issueTx(signedTx)
+  console.log("Transaction submitted!")
+  console.log("----------------------------------------------------------------")
+  console.log(`Visit https://explorer.avax-test.network/tx/${txID} to see transaction details`)
+  console.log("----------------------------------------------------------------")
+
+  // Check transaction status
+  let status = await chain.getTxStatus(txID)
+  console.log("Current transaction status:", status)
+
+  // Wait 2s
+  setTimeout(async function() {
+    // Check status again
+    status = await chain.getTxStatus(txID)
+    console.log("Updated transaction status:", status)
+
+    // Final balance check
+    balance = await chain.getBalance(address, assetID)
+    console.log("Balance after sending tx:", balance)
+  }, 2000)
 }
 
 main().catch((err) => {
