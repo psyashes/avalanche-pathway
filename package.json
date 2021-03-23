@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "avalanche": "^3.2.2",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "ethereumjs-util": "^7.0.9"
   }
 }
