@@ -25,6 +25,20 @@ async function main() {
   const ethAddr = ethUtil.Address.fromPrivateKey(Buffer.from(keyBuff, "hex")).toString("hex")
   console.log("Derived Eth address:", ethAddr)
 
+  // Create a X->C export transaction
+  await createExport(client, xChain, xKeychain, cKeychain)
+
+  // Add some delay to let the transaction clear first, then perform the import
+  setTimeout(async function() {
+    await createImport(client, cChain, cKeychain, ethAddr)
+
+    console.log("----------------------------------------------------------------")
+    console.log(`Visit https://cchain.explorer.avax-test.network/address/${ethAddr} for balance details`)
+    console.log("----------------------------------------------------------------")
+  }, 3000)
+}
+
+async function createExport(client, xChain, xKeychain, cKeychain) {
   // Prepare transaction details
   const amount = "50000000" // Total amount we're transferring = 0.05 AVAX
   const asset = "AVAX" // Primary asset used for the transaction (Avalanche supports many)
@@ -59,6 +73,9 @@ async function main() {
   console.log("X-Chain export TX:", exportTxID)
   console.log(` - https://explorer.avax-test.network/tx/${exportTxID}`)
 
+}
+
+async function createImport(client, cChain, cKeychain, address) {
   // Get the real ID for the source chain
   const sourceChain = await client.Info().getBlockchainID("X")
 
@@ -79,15 +96,6 @@ async function main() {
   console.log("C-Chain import TX:", importTX)
   console.log(` - https://explorer.avax-test.network/tx/${importTX}`)
 
-  // 3. Perform transfer
-}
-
-async function createExport(client, xChain, xKeychain, cKeychain) {
-  // Will fill later
-}
-
-async function createImport(client, cChain, cKeychain, address) {
-  // Will fill later
 }
 
 main().catch((err) => {
